@@ -18,6 +18,7 @@ Slime::Slime(Vector2 position_, Vector2 vector_, float speed_)
 {
 	position = position_;
 	vector = vector_;
+    vector.NormalizeTo(1);
     speed = speed_;
 
     leftSensorVec = Vector2((float)cos(3.1415 * sensorAngle / 180), (float)sin(3.1415 * sensorAngle / 180));
@@ -52,27 +53,33 @@ void Slime::Update()
 void Slime::GetSensorCoords()
 {
     Vector2 v0 = vector.GetRotatedOverVec(leftSensorVec);
-    v0.Normalize();
-    v0.ScalarMultiply(sensorDistance);
+    v0.NormalizeTo(sensorDistance);
     sensor0 = position.Duplicate();
     sensor0.Add(v0);
     
     Vector2 v1 = vector.Duplicate();
-    v1.Normalize();
-    v1.ScalarMultiply(sensorDistance);
+    v1.NormalizeTo(sensorDistance);
     sensor1 = position.Duplicate();
     sensor1.Add(v1);
 
     Vector2 v2 = vector.GetRotatedOverVec(rightSensorVec);
-    v2.Normalize();
-    v2.ScalarMultiply(sensorDistance);
+    v2.NormalizeTo(sensorDistance);
     sensor2 = position.Duplicate();
     sensor2.Add(v2);
 }
 
-float Slime::GetPowerAtPosition(Vector2 position)
+float Slime::GetPowerAtPosition(Vector2 pos)
 {
-    return 1;
+    int j = (int)(pos.x * Slime::SQUARES_WIDTH / Slime::SCREEN_WIDTH);
+    int i = (int)(pos.y * Slime::SQUARES_HEIGHT / Slime::SCREEN_HEIGHT);
+    Vector3 read = Slime::map.map[i][j];
+    return read.x;
+    read.Subtract(color);
+    read.Abs();
+    if (read.x < colorThreshold && read.y < colorThreshold && read.z < colorThreshold)
+    {
+        return colorThreshold * 3 - (read.x + read.y + read.z);
+    }
 }
 
 bool Slime::SensorOut(Vector2 sensor)
@@ -98,14 +105,24 @@ void Slime::Sense()
             if (turningAwayFromWall == 0)
             {
                 TurnLeft();
-            } else
+            } 
+            else
             {
                 TurnRight();
             }
         } else
         {
-            turningAwayFromWall = 0;
-            TurnLeft();
+            std::srand(std::time(nullptr));
+            if (std::rand() % 2 == 0)
+            {
+                turningAwayFromWall = 0;
+                TurnLeft();
+            }
+            else
+            {
+                turningAwayFromWall = 1;
+                TurnRight();
+            }
         }
     }
     else
@@ -138,9 +155,15 @@ void Slime::Sense()
         // Front < both, so trails are on both sides, choose one at random
         else if (sensorValue1 < sensorValue0 && sensorValue1 < sensorValue2)
         {
-             TurnLeft();
+            if (std::rand() % 2 == 0)
+            {
+                TurnLeft();
+            } else
+            {
+                TurnRight();
+            }
         }
-        // Front > one of them, check which one is greaterand turn that way
+        // Front > one of them, check which one is greater and turn that way
         // Right > Left
         else if (sensorValue2 > sensorValue0)
         {
@@ -157,28 +180,29 @@ void Slime::Sense()
 void Slime::TurnLeft()
 {
     vector = vector.GetRotatedOverVec(vectorLeft);
-    vector.Normalize();
+    vector.NormalizeTo(1);
 }
 
 void Slime::TurnRight()
 {
     vector = vector.GetRotatedOverVec(vectorRight);
-    vector.Normalize();
+    vector.NormalizeTo(1);
 }
 
 void Slime::Trail()
 {
     int j = (int)(position.x * Slime::SQUARES_WIDTH / Slime::SCREEN_WIDTH);
     int i = (int)(position.y * Slime::SQUARES_HEIGHT / Slime::SCREEN_HEIGHT);
-    Slime::map.map[i][j] = Vector3(1);
-    Slime::map.map[i+1][j] = Vector3(1);
-    Slime::map.map[i-1][j] = Vector3(1);
-    Slime::map.map[i+1][j+1] = Vector3(1);
-    Slime::map.map[i+1][j-1] = Vector3(1);
-    Slime::map.map[i][j+1] = Vector3(1);
-    Slime::map.map[i][j-1] = Vector3(1);
-    Slime::map.map[i-1][j+1] = Vector3(1);
-    Slime::map.map[i-1][j-1] = Vector3(1);
+    for (int iOffset = i - drawRadius; iOffset <= i + drawRadius; iOffset++)
+    {
+        for (int jOffset = j - drawRadius; jOffset <= j + drawRadius; jOffset++)
+        {
+            if (iOffset >= 0 && iOffset < SQUARES_WIDTH && jOffset >= 0 && jOffset < SQUARES_HEIGHT)
+            {
+                Slime::map.map[iOffset][jOffset] = Vector3(1);
+            }
+        }
+    }
 }
 
 void Slime::Move()

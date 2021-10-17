@@ -39,7 +39,7 @@ DataMap::DataMap(int SQUARES_WIDTH_, int SQUARES_HEIGHT_)
 	}
 
 	vertices = new GLfloat[(int64_t)VERTS_WIDTH * VERTS_HEIGHT * 6];
-	mainMesh = DrawingData((int64_t)VERTS_WIDTH * VERTS_HEIGHT * 3);
+	mainMesh = DrawingData((int64_t)VERTS_WIDTH * VERTS_HEIGHT * 6);
 }
 
 void DataMap::GenerateVertices()
@@ -92,7 +92,7 @@ void DataMap::Decay()
 	{
 		for (int j = 0; j < SQUARES_WIDTH; j++)
 		{
-			if (map[i][j].Magnitude() < minValue)
+			if (map[i][j].x + map[i][j].y + map[i][j].z < minValue)
 			{
 				map[i][j].SetValues(std::make_tuple(0.0f, 0.0f, 0.0f));
 			}
@@ -111,7 +111,7 @@ void DataMap::MapToInd()
 	{
 		for (int j = 0; j < SQUARES_WIDTH; j++)
 		{
-			if (!map[i][j].Equals(Vector3(0, 0, 0)))
+			if (map[i][j].x > .6)
 			{
 				mainMesh.AddIndex(i * VERTS_WIDTH + j);
 				mainMesh.AddIndex(i * VERTS_WIDTH + j + 1);
@@ -130,7 +130,7 @@ void DataMap::GenerateShaders()
 	// Generates Vertex Buffer Object and links it to vertices
 	VBO.Generate(vertices, (int64_t)VERTS_WIDTH * VERTS_HEIGHT * 3 * sizeof(*vertices));
 
-	mainMesh.Generate(VBO, "default.vert", "useMap.frag", sizeof(*vertices));
+	mainMesh.Generate(VBO, "default.vert", "black.frag", sizeof(*vertices));
 
 	VBO.Unbind();
 	VBO.Delete();

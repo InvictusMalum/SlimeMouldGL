@@ -22,7 +22,7 @@ public:
 	static DataMap map;
 	static void UpdateAll();
 	static bool SensorOut(Vector2 sensor);
-	static float GetPowerAtPosition(Vector2 position);
+	float GetPowerAtPosition(Vector2 position);
 
 	Vector2 position = Vector2();
 	Vector2 vector = Vector2();
@@ -31,6 +31,8 @@ public:
 	float sensorAngle = 22.5;
 	float sensorDistance = 20;
 	float turnPerStep = 10;
+
+	int drawRadius = 1;
 
 	Vector2 leftSensorVec;
 	Vector2 rightSensorVec;
@@ -42,7 +44,7 @@ public:
 	Vector2 sensor1;
 	Vector2 sensor2;
 
-	Vector3 color;
+	Vector3 color = Vector3(1);
 	
 	int speedMin = 1;
 	int speedMax = 10;

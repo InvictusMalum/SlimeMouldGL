@@ -26,8 +26,11 @@ public:
 	float Magnitude();
 
 	void Normalize();
+	void NormalizeTo(float length);
 
 	bool Equals(Vector3 other);
+
+	void Abs();
 
 	float x;
 	float y;

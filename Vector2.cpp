@@ -44,6 +44,12 @@ void Vector2::Normalize()
 	ScalarMultiply(1 / Magnitude());
 }
 
+void Vector2::NormalizeTo(float length)
+{
+	ScalarMultiply(length / Magnitude());
+}
+
+
 Vector2 Vector2::GetRotatedOverVec(Vector2 other)
 {
 	float outx = x * other.x - y * other.y;

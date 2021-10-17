@@ -28,9 +28,9 @@ public:
 	Vector3** old;
 	
 	int diffuseSize = 2;
-	double decayFactor = .99;
+	double decayFactor = .85;
 
-	double minValue = 0.0005;
+	double minValue = 0.05;
 
 	DataMap();
 	DataMap(int SQUARES_WIDTH_, int SQUARES_HEIGHT_);

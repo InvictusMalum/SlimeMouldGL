@@ -61,12 +61,17 @@ void Vector3::ScalarMultiply(float s)
 
 float Vector3::Magnitude()
 {
-	return (float)sqrt((int64_t)x * (int64_t)x + (int64_t)y * (int64_t)y + (int64_t)z * (int64_t)z);
+	return sqrt(x * x + y * y + z * z);
 }
 
 void Vector3::Normalize()
 {
 	ScalarMultiply(1 / Magnitude());
+}
+
+void Vector3::NormalizeTo(float length)
+{
+	ScalarMultiply(length / Magnitude());
 }
 
 bool Vector3::Equals(Vector3 other)
@@ -76,4 +81,11 @@ bool Vector3::Equals(Vector3 other)
 		return true;
 	}
 	return false;
+}
+
+void Vector3::Abs()
+{
+	x = abs(x);
+	y = abs(y);
+	z = abs(z);
 }

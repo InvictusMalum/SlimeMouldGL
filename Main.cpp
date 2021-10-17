@@ -1,4 +1,6 @@
 #include<iostream>
+#include<cstdlib>
+#include<ctime>
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 
@@ -12,11 +14,11 @@
 
 using namespace std;
 
-const int SCREEN_WIDTH = 720;
-const int SCREEN_HEIGHT = 720;
+const int SCREEN_WIDTH = 90;
+const int SCREEN_HEIGHT = 90;
 
-const int SQUARES_WIDTH = 360;
-const int SQUARES_HEIGHT = 360;
+const int SQUARES_WIDTH = 89;
+const int SQUARES_HEIGHT = 89;
 
 DataMap dM(SQUARES_WIDTH, SQUARES_HEIGHT);
 
@@ -28,10 +30,18 @@ int main()
 	Slime::SCREEN_HEIGHT = SCREEN_HEIGHT;
 	Slime::SQUARES_WIDTH = SQUARES_WIDTH;
 	Slime::SQUARES_HEIGHT = SQUARES_HEIGHT;
-
-	for (int i = 0; i < 1; i++)
+	std::srand(std::time(nullptr));
+	
+	float slimePercent = .07;
+	int slimes = slimePercent * SQUARES_HEIGHT * SQUARES_WIDTH;
+	for (int i = 0; i < 600; i++)
 	{
-		Slime s(Vector2(20, 20), Vector2(1, 0), 3);
+		int angle = std::rand() / ((RAND_MAX + 1u) / 360);
+		Slime s(Vector2(5 + std::rand() /((RAND_MAX + 1u) / (SCREEN_WIDTH-10)), 
+					5+ std::rand() / ((RAND_MAX + 1u) / (SCREEN_HEIGHT - 10))), 
+			Vector2(cos(3.1415 * angle / 180), 
+					sin(3.1415*angle/180)),
+			3);
 	}
 	Slime::UpdateAll();
 
@@ -53,12 +63,11 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		Slime::UpdateAll();
+		Slime::map.Diffuse();
+		Slime::map.Decay();
 		Slime::map.MapToInd();
 		Slime::map.GenerateShaders();
 		Slime::map.Draw();
-		Slime::map.Diffuse();
-		Slime::map.Decay();
-
 
 		// Update Screen
 		// Swap back and front buffers
