@@ -20,6 +20,10 @@ public:
 	float Magnitude();
 
 	void Normalize();
+
+	Vector2 GetRotatedOverVec(Vector2 other);
+
+	Vector2 Duplicate();
 	
 	float x;
 	float y;

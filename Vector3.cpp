@@ -1,5 +1,6 @@
 #include<iostream>
 #include<math.h>
+#include <tuple>
 #include"Vector3.h"
 
 using namespace std;
@@ -17,6 +18,25 @@ Vector3::Vector3(float x_, float y_, float z_)
 	y = y_;
 	z = z_;
 };
+
+Vector3::Vector3(float num)
+{
+	x = num;
+	y = num;
+	z = num;
+};
+
+void Vector3::SetValues(std::tuple<float, float, float> tuple)
+{
+	x = std::get<0>(tuple);
+	y = std::get<1>(tuple);
+	z = std::get<2>(tuple);
+}
+
+std::tuple<float, float, float> Vector3::GetValues()
+{
+	return std::make_tuple(x, y, z);
+}
 
 void Vector3::Add(Vector3 other)
 {
@@ -47,4 +67,13 @@ float Vector3::Magnitude()
 void Vector3::Normalize()
 {
 	ScalarMultiply(1 / Magnitude());
+}
+
+bool Vector3::Equals(Vector3 other)
+{
+	if (x == other.x && y == other.y && z == other.z)
+	{
+		return true;
+	}
+	return false;
 }
