@@ -80,8 +80,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\tyler\source\repos\InvictusMalum\SlimeMouldGL\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\tyler\source\repos\InvictusMalum\SlimeMouldGL\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\tylerweed\source\repos\InvictusMalum\SlimeMouldGL\Libraries\include;C:\Users\tyler\source\repos\InvictusMalum\SlimeMouldGL\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\tylerweed\source\repos\InvictusMalum\SlimeMouldGL\Libraries\lib;C:\Users\tyler\source\repos\InvictusMalum\SlimeMouldGL\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
